@@ -1,10 +1,10 @@
 // Datos del torneo
 const tournamentData = [
-  {Pos:0, Players: "Eduardo",   J: 159, G: 99,  P: 60,  Dif: 0, PCT: 0, Titulos: 3 },
-  {Pos:0, Players: "Christian", J: 159, G: 92,  P: 67,  Dif: 0, PCT: 0, Titulos: 0 },
-  {Pos:0, Players: "Daniel",    J: 159, G: 87,  P: 72,  Dif: 0, PCT: 0, Titulos: 0 },
-  {Pos:0, Players: "Erycherd",  J: 159, G: 89,  P: 70,  Dif: 0, PCT: 0, Titulos: 0 },
-  {Pos:0, Players: "Kleydi",    J: 159, G: 88,  P: 71,  Dif: 0, PCT: 0, Titulos: 0 },
+  {Pos:0, Players: "Eduardo",   J: 162, G: 100, P: 62,  Dif: 0, PCT: 0, Titulos: 3 },,
+  {Pos:0, Players: "Christian", J: 162, G: 93,  P: 69,  Dif: 0, PCT: 0, Titulos: 0 },,
+  {Pos:0, Players: "Daniel",    J: 162, G: 88,  P: 74,  Dif: 0, PCT: 0, Titulos: 0 },,
+  {Pos:0, Players: "Erycherd",  J: 162, G: 92,  P: 70,  Dif: 0, PCT: 0, Titulos: 0 },,
+  {Pos:0, Players: "Kleydi",    J: 162, G: 90,  P: 72,  Dif: 0, PCT: 0, Titulos: 0 },,
 ];
 
 // Procesar datos
