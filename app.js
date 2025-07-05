@@ -1,10 +1,10 @@
 // Datos del torneo - Ahora como constante con nombres más descriptivos
 const TOURNAMENT_DATA = [
-  {pos: 0, players: "Eduardo",   j: 162, g: 100, p: 62, dif: 0, pct: 0, titulos: 3},
-  {pos: 0, players: "Christian", j: 162, g: 93, p: 69, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Daniel",    j: 162, g: 88, p: 74, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Erycherd",  j: 162, g: 92, p: 70, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Kleydi",    j: 162, g: 90, p: 72, dif: 0, pct: 0, titulos: 0}
+  {pos: 0, players: "Eduardo",   j: 172, g: 106, p: 66, dif: 0, pct: 0, titulos: 3},
+  {pos: 0, players: "Christian", j: 172, g: 97, p: 75, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Daniel",    j: 172, g: 93, p: 79, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Erycherd",  j: 172, g: 99, p: 73, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Kleydi",    j: 172, g: 95, p: 77, dif: 0, pct: 0, titulos: 0}
 ];
 
 // Función para sanitizar HTML y prevenir inyección de código
