@@ -94,17 +94,6 @@ mundial-pronosticos-2025/
 - Gráfico circular de distribución
 - Evolución temporal de posiciones
 
-## 🎨 Capturas de Pantalla
-
-### Vista Desktop
-![Vista Desktop](docs/screenshots/desktop.png)
-
-### Vista Móvil
-![Vista Móvil](docs/screenshots/mobile.png)
-
-### Modo Oscuro
-![Modo Oscuro](docs/screenshots/dark-mode.png)
-
 ## 🔧 Scripts Disponibles
 
 ```bash
@@ -150,7 +139,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 **Eduardo Romero**
 - 📧 Email: eduardoromeror9@gmail.com
-- 🌐 Website: [eduardoromero.dev](mundialdepronosticos.netlify.app)
+- 🌐 Website: [edu.com](mundialdepronosticos.netlify.app)
 - 📱 WhatsApp: [+56 9 3290 2445](https://wa.me/56932902445)
 - 📷 Instagram: [@eduardoromeror9](https://www.instagram.com/eduardoromeror9/)
 - 🐦 Twitter: [@eduardoR9](https://x.com/eduardoR9)
