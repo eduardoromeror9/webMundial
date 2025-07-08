@@ -1,10 +1,18 @@
 // Datos del torneo - Ahora como constante con nombres más descriptivos
 const TOURNAMENT_DATA = [
+<<<<<<< Updated upstream
   {pos: 0, players: "Eduardo",   j: 172, g: 106, p: 66, dif: 0, pct: 0, titulos: 3},
   {pos: 0, players: "Christian", j: 172, g: 97, p: 75, dif: 0, pct: 0, titulos: 0},
   {pos: 0, players: "Daniel",    j: 172, g: 93, p: 79, dif: 0, pct: 0, titulos: 0},
   {pos: 0, players: "Erycherd",  j: 172, g: 99, p: 73, dif: 0, pct: 0, titulos: 0},
   {pos: 0, players: "Kleydi",    j: 172, g: 95, p: 77, dif: 0, pct: 0, titulos: 0}
+=======
+  {pos: 0, players: "Eduardo",   j: 178, g: 111,p: 67, dif: 0, pct: 0, titulos: 3},
+  {pos: 0, players: "Erycherd",  j: 178, g: 105,p: 73, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Christian", j: 178, g: 100, p: 78, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Kleydi",    j: 178, g: 99, p: 79, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Daniel",    j: 172, g: 93, p: 79, dif: 0, pct: 0, titulos: 0}
+>>>>>>> Stashed changes
 ];
 
 // Función para sanitizar HTML y prevenir inyección de código
