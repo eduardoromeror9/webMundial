@@ -101,6 +101,12 @@ body::before {
     color: var(--primary-gold);
 }
 
+/* Microinteracción: Brillo sutil al pasar el mouse sobre el título */
+.main-title:hover {
+    filter: brightness(1.2) drop-shadow(0 0 10px var(--primary-gold));
+    transition: filter 0.3s;
+}
+
 .subtitle {
     font-size: clamp(1rem, 3vw, 1.5rem);
     color: var(--primary-green);
@@ -121,6 +127,23 @@ body::before {
     backdrop-filter: blur(10px);
 }
 
+/* Break responsivo para el mensaje divertido */
+/* .mobile-break {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-break {
+        display: block;
+    }
+} */
+
+/* Sombra y brillo en mensajes destacados */
+.leader-message, .fun-message {
+    box-shadow: 0 0 30px 0 rgba(255, 215, 0, 0.15), 0 2px 8px 0 rgba(46, 204, 113, 0.10);
+    border: 1.5px solid var(--primary-gold);
+}
+
 .leader-message {
     background: linear-gradient(45deg, var(--primary-green), #27AE60);
     border-radius: 10px;
@@ -134,13 +157,18 @@ body::before {
 }
 
 .table-container {
-    background: var(--glass-bg);
+    background: rgba(255,255,255,0.10);
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
     border-radius: 20px;
     padding: 30px;
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow-strong);
     overflow: hidden;
+}
+
+/* Microinteracción: Efecto glassmorphism más notorio en la tabla */
+.table-container:hover {
+    animation: borderGlow 1.5s linear;
 }
 
 /* Mejorado: Wrapper para scroll horizontal en móvil */
@@ -161,6 +189,7 @@ body::before {
     box-shadow: var(--shadow-medium);
 }
 
+/* Mejor visibilidad para títulos de columna */
 .stats-table th {
     background: linear-gradient(45deg, var(--primary-purple), #a29bfe);
     color: white;
@@ -169,11 +198,12 @@ body::before {
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     border: 1px solid var(--glass-border);
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     position: relative;
     white-space: nowrap;
+    text-shadow: 0 2px 8px rgba(106, 27, 154, 0.15);
 }
 
 .stats-table th:first-child {
@@ -219,9 +249,15 @@ body::before {
     transition: var(--transition-smooth);
 }
 
+/* Hover animado en filas de la tabla */
+.stats-table tbody tr {
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+}
 .stats-table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.01) translateY(-4px);
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.08);
 }
 
 .stats-table tbody tr:hover td {
@@ -313,6 +349,12 @@ body::before {
     transition: var(--transition-smooth);
 }
 
+/* Botones: microinteracción de rebote */
+.retry-btn:active {
+    transform: scale(0.96);
+    background: var(--primary-green);
+}
+
 .retry-btn:hover {
     background: #2980b9;
     transform: translateY(-2px);
@@ -341,53 +383,54 @@ body::before {
 
 /* Footer */
 .footer {
-    margin-top: 60px;
+    margin-top: 40px;
     text-align: center;
-    padding: 40px 20px;
+    padding: 25px 20px;
     background: var(--glass-bg);
-    border-radius: 20px;
+    border-radius: 15px;
     backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-medium);
+    animation: fadeInUp 1.2s 0.5s both;
 }
 
 .footer-content {
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
 .footer-content p {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .footer-content p:first-child {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: var(--primary-gold);
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .social-buttons {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 15px;
 }
 
 .social-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 42px;
+    height: 42px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: 50%;
     color: var(--text-primary);
     text-decoration: none;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     transition: var(--transition-smooth);
     backdrop-filter: blur(10px);
     position: relative;
@@ -490,6 +533,22 @@ body::before {
 }
 
 /* Responsive Design */
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 95%;
+    }
+    
+    .main-title {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+    }
+    
+    .stats-table {
+        min-width: 700px;
+    }
+}
+
+/* Tablets pequeñas y móviles grandes */
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -525,6 +584,8 @@ body::before {
     .table-container {
         padding: 15px;
         border-radius: 15px;
+        box-shadow: 0 2px 8px 0 rgba(31,38,135,0.15);
+        backdrop-filter: blur(4px);
     }
     
     .stats-table {
@@ -551,48 +612,136 @@ body::before {
     }
     
     .footer {
-        margin-top: 40px;
-        padding: 30px 15px;
+        margin-top: 30px;
+        padding: 20px 15px;
+        box-shadow: 0 2px 8px 0 rgba(31,38,135,0.10);
+        animation: none;
     }
     
     .social-buttons {
-        gap: 12px;
+        gap: 10px;
+        margin-top: 12px;
     }
     
     .social-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.3rem;
+        width: 38px;
+        height: 38px;
+        font-size: 1.2rem;
+    }
+    
+    .main-title:hover {
+        filter: none;
+    }
+    
+    .stats-table tbody tr:hover {
+        box-shadow: none;
+        transform: scale(1) translateY(-2px);
     }
 }
 
+/* Móviles pequeños */
 @media (max-width: 480px) {
     .main-title {
         font-size: 1.8rem;
     }
     
-    .stats-table {
-        min-width: 450px;
-        font-size: 0.8rem;
+    .emoji-decoration {
+        display: none; /* Ocultar emojis decorativos en móviles muy pequeños */
     }
     
-    .stats-table th {
-        padding: 10px 6px;
+    .fun-message {
+        font-size: 0.9rem;
+        padding: 10px;
+        line-height: 1.4;
+    }
+    
+    .leader-message {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+    
+    .table-container {
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .stats-table {
+        min-width: 400px; /* Reducir ancho mínimo */
         font-size: 0.75rem;
     }
     
+    .stats-table th {
+        padding: 8px 4px;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
+    }
+    
     .stats-table td {
-        padding: 10px 6px;
+        padding: 8px 4px;
+    }
+    
+    /* Ocultar columnas menos importantes en móviles muy pequeños */
+    .stats-table th:nth-child(3), /* Juegos jugados */
+    .stats-table td:nth-child(3) {
+        display: none;
     }
     
     .leader-row .position::before {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
     
     .social-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+    
+    .table-container {
+        box-shadow: none;
+        backdrop-filter: blur(2px);
+    }
+    
+    .footer {
+        box-shadow: none;
+        margin-top: 25px;
+        padding: 18px 12px;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+    .main-title {
+        font-size: 1.6rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .stats-table {
+        min-width: 350px;
+        font-size: 0.7rem;
+    }
+    
+    .stats-table th {
+        padding: 6px 3px;
+        font-size: 0.65rem;
+    }
+    
+    .stats-table td {
+        padding: 6px 3px;
+    }
+    
+    /* Ocultar más columnas en pantallas muy pequeñas */
+    .stats-table th:nth-child(6), /* Diferencia */
+    .stats-table td:nth-child(6) {
+        display: none;
+    }
+    
+    .social-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
     }
 }
 
@@ -655,5 +804,18 @@ body::before {
     .stats-table td {
         background: white;
         border: 1px solid #000;
+    }
+}
+
+/* Animación de brillo en el borde de la tabla */
+@keyframes borderGlow {
+    0% {
+        box-shadow: 0 0 0px var(--primary-gold);
+    }
+    50% {
+        box-shadow: 0 0 16px var(--primary-gold);
+    }
+    100% {
+        box-shadow: 0 0 0px var(--primary-gold);
     }
 }
