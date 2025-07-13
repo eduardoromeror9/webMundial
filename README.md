@@ -1,4 +1,4 @@
-# 🌍 Mundial de Pronósticos 2025  [Visita la Web!!](https://mundialdepronosticos.netlify.app/)
+# [🌍 Mundial de Pronósticos 2025 ](https://mundialdepronosticos.netlify.app/)
 
 Una aplicación web moderna para mostrar estadísticas y posiciones de un torneo de pronósticos deportivos.
 
