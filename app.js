@@ -33,4 +33,4 @@ if (document.readyState === 'loading') {
 // Exportar datos y funciones para uso futuro
 window.TOURNAMENT_DATA = TOURNAMENT_DATA;
 
-console.table(TOURNAMENT_DATA)
+// console.table(TOURNAMENT_DATA)
