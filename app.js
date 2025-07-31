@@ -1,10 +1,10 @@
 // Datos del torneo - Ahora como constante con nombres más descriptivos
 const TOURNAMENT_DATA = [
-  {pos: 0, players: "Eduardo",   j: 229, g: 133, p: 96, dif: 0, pct: 0, titulos: 3},
-  {pos: 0, players: "Erycherd",  j: 229, g: 121, p: 108, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Christian", j: 229, g: 125, p: 104, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Kleydi",    j: 229, g: 125, p: 104, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Daniel",    j: 229, g: 120, p: 109, dif: 0, pct: 0, titulos: 0}
+  {pos: 0, players: "Eduardo",   j: 232, g: 136, p: 96, dif: 0, pct: 0, titulos: 3},
+  {pos: 0, players: "Erycherd",  j: 232, g: 122, p: 110, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Christian", j: 232, g: 126, p: 106, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Kleydi",    j: 232, g: 126, p: 106, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Daniel",    j: 232, g: 121, p: 111, dif: 0, pct: 0, titulos: 0}
 ];
 
 // Inicialización principal usando módulos separados
@@ -33,4 +33,4 @@ if (document.readyState === 'loading') {
 // Exportar datos y funciones para uso futuro
 window.TOURNAMENT_DATA = TOURNAMENT_DATA;
 
-// console.table(TOURNAMENT_DATA)
+console.table(TOURNAMENT_DATA)
