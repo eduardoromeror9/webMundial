@@ -1,10 +1,10 @@
 // Datos del torneo - Ahora como constante con nombres más descriptivos
 const TOURNAMENT_DATA = [
-  {pos: 0, players: "Eduardo",   j: 372, g: 216, p: 156, dif: 0, pct: 0, titulos: 3},
-  {pos: 0, players: "Christian", j: 372, g: 212, p: 160, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Kleydi",    j: 372, g: 203, p: 169, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Erycherd",  j: 372, g: 203, p: 169, dif: 0, pct: 0, titulos: 0},
-  {pos: 0, players: "Daniel",    j: 372, g: 200, p: 172, dif: 0, pct: 0, titulos: 0}
+  {pos: 0, players: "Eduardo",   j: 378, g: 220, p: 158, dif: 0, pct: 0, titulos: 3},
+  {pos: 0, players: "Christian", j: 378, g: 215, p: 163, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Erycherd",  j: 378, g: 208, p: 170, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Kleydi",    j: 378, g: 206, p: 172, dif: 0, pct: 0, titulos: 0},
+  {pos: 0, players: "Daniel",    j: 378, g: 203, p: 175, dif: 0, pct: 0, titulos: 0}
 ];
 
 // Inicialización principal usando módulos separados
