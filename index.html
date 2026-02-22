@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mundial de Pronósticos 2025 - Tabla de posiciones y estadísticas">
+  <meta name="description" content="Mundial de Pronósticos 2026 - Tabla de posiciones y estadísticas">
   <meta name="keywords" content="pronósticos, mundial, estadísticas, deportes">
   <meta name="author" content="Eduardo Romero">
-  
+
   <!-- Mejorado: CSP básico para seguridad -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' fonts.googleapis.com fonts.gstatic.com; font-src fonts.googleapis.com fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
-  
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'self' 'unsafe-inline' fonts.googleapis.com fonts.gstatic.com; font-src fonts.googleapis.com fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
+
   <!-- Mejorado: Preload de fuentes críticas -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" as="style">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap">
-  
-  <title>Mundial de Pronósticos 2025</title>
-  
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap"
+    as="style">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <title>Mundial de Pronósticos Temporada 2026</title>
+
   <!-- Corregido: Rutas relativas en lugar de absolutas -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="/css/style.css">
-  
+
   <!-- Mejorado: Favicon con fallback -->
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
   <link rel="alternate icon" href="img/favicon.ico">
-  
+
   <!-- Mejorado: PWA meta tags -->
   <meta name="theme-color" content="#0f0f0f">
   <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Mundial 2025">
+  <meta name="apple-mobile-web-app-title" content="Mundial 2026">
   <meta name="mobile-web-app-capable" content="yes">
-  
+
   <!-- Mejorado: Open Graph para redes sociales -->
-  <meta property="og:title" content="Mundial de Pronósticos 2025">
+  <meta property="og:title" content="Mundial de Pronósticos 2026">
   <meta property="og:description" content="Tabla de posiciones y estadísticas del Mundial de Pronósticos">
   <meta property="og:type" content="website">
   <meta property="og:image" content="img/og-image.jpg">
 </head>
+
 <body>
   <!-- Mejorado: Contenedor de pelotas flotantes con aria-hidden -->
   <div class="floating-balls" aria-hidden="true">
@@ -53,22 +59,23 @@
   <div class="container">
     <header class="header">
       <div class="emoji-decoration" aria-hidden="true">⚾</div>
-      <h1 class="main-title">Mundial de Pronósticos Temp 2025</h1>
+      <h1 class="main-title">Mundial de Pronósticos Temp 2026</h1>
       <div class="emoji-decoration" aria-hidden="true">🔥</div>
-      
-      <p class="subtitle">Copa "El Regreso de Kleydi 🔥 Y la salida de Milton estafa"</p>
-      
+
+      <p class="subtitle">Copa "extrañamos a Milton estafa"</p>
+
       <div class="fun-message" role="banner">
-        😩 Ya lo de Daniel es caso de estudio, nunca termina las cosas que empieza 😩
+        😩 Estamos haciendo todo lo posible para que Daniel aprenda
         <br class="mobile-break">
-        😩 No pudo con el bachillerato y no puede con 3 jugadas 😩
+        a manejar, ya tiene casi 40 años 😩
       </div>
     </header>
-      
+
     <div class="leader-message" role="alert" aria-live="polite">
-    🔥 El King vuelve a coronarse campeón de la primera mitad: está completamente fuera de lote 🔥
+      🔥 El King vuelve a coronarse campeón, lleva 3 títulos en fila <br>
+      está completamente fuera de lote 🔥
     </div>
-      
+
     <!-- Mejorado: Contenido principal con landmark -->
     <main id="main-content" class="table-container">
       <div class="table-wrapper">
@@ -90,12 +97,12 @@
           </tbody>
         </table>
       </div>
-      
+
       <!-- Mejorado: Mensaje de carga -->
       <div id="loading-message" class="loading-message" style="display: none;">
         <p>Cargando estadísticas...</p>
       </div>
-      
+
       <!-- Mejorado: Mensaje de error -->
       <div id="error-message" class="error-message" style="display: none;">
         <p>Error al cargar los datos. Por favor, recarga la página.</p>
@@ -103,35 +110,23 @@
       </div>
     </main>
   </div>
-    
+
   <footer class="footer">
     <div class="footer-content">
-      <p>Mundial de Pronósticos 2025 🏆</p>
-      <p>&copy; 2025 Eduardo Romero Web Dev.</p>
-        
+      <p>Mundial de Pronósticos 2026 🏆</p>
+      <p>&copy; 2026 Eduardo Romero Web Dev.</p>
+
       <nav class="social-buttons" aria-label="Redes sociales">
-        <a href="https://wa.me/56932902445" 
-           class="social-btn whatsapp" 
-           title="Contactar por WhatsApp" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           aria-label="WhatsApp">
+        <a href="https://wa.me/56932902445" class="social-btn whatsapp" title="Contactar por WhatsApp" target="_blank"
+          rel="noopener noreferrer" aria-label="WhatsApp">
           <span aria-hidden="true">📱</span>
         </a>
-        <a href="https://www.instagram.com/eduardoromeror9/" 
-           class="social-btn instagram" 
-           title="Seguir en Instagram" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           aria-label="Instagram">
+        <a href="https://www.instagram.com/eduardoromeror9/" class="social-btn instagram" title="Seguir en Instagram"
+          target="_blank" rel="noopener noreferrer" aria-label="Instagram">
           <span aria-hidden="true">📷</span>
         </a>
-        <a href="https://x.com/eduardoR9" 
-           class="social-btn twitter" 
-           title="Seguir en X (Twitter)" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           aria-label="X (Twitter)">
+        <a href="https://x.com/eduardoR9" class="social-btn twitter" title="Seguir en X (Twitter)" target="_blank"
+          rel="noopener noreferrer" aria-label="X (Twitter)">
           <span aria-hidden="true">🐦</span>
         </a>
       </nav>
@@ -140,7 +135,7 @@
 
   <!-- Mejorado: Script cargado de forma asíncrona -->
   <script type="module" src="app.js"></script>
-  
+
   <!-- Mejorado: Service Worker para PWA (opcional) -->
   <script>
     if ('serviceWorker' in navigator) {
@@ -151,7 +146,7 @@
       });
     }
   </script>
-  
+
   <!-- Mejorado: Analytics de rendimiento -->
   <script>
     // Medir Core Web Vitals
@@ -160,8 +155,9 @@
         for (const entry of list.getEntries()) {
           console.log(`${entry.name}: ${entry.value}`);
         }
-      }).observe({entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift']});
+      }).observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] });
     }
   </script>
 </body>
+
 </html>
