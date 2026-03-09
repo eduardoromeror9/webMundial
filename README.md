@@ -4,20 +4,15 @@ Una aplicación web moderna para mostrar estadísticas y posiciones de un torneo
 
 ## 📋 Descripción
 
-Esta aplicación permite visualizar de manera interactiva y atractiva las estadísticas de los participantes en el "Mundial de Pronósticos 2025". Incluye una tabla dinámica con filtros, ordenamiento, y efectos visuales modernos.
+Esta aplicación permite visualizar de manera interactiva y atractiva las estadísticas de los participantes en el "Mundial de Pronósticos 2025".
 
 ## ✨ Características
 
 - 📊 **Tabla de estadísticas** con datos en tiempo real
-- 🔍 **Filtros y búsqueda** de jugadores
 - 📱 **Diseño responsive** para todos los dispositivos
 - 🎨 **Interfaz moderna** con animaciones suaves
 - ♿ **Accesibilidad** completa (ARIA, navegación por teclado)
 - ⚡ **Performance optimizado** con lazy loading
-- 📈 **Gráficos estadísticos** interactivos
-- 💾 **Exportación** de datos (CSV, PDF)
-- 🌙 **Modo oscuro/claro**
-- 📊 **Analytics** integrados
 
 ## 🚀 Instalación
 
@@ -59,18 +54,12 @@ mundial-pronosticos-2025/
 ├── src/
 │   ├── js/
 │   │   ├── app.js          # Lógica principal
-│   │   ├── charts.js       # Gráficos estadísticos
-│   │   ├── filters.js      # Filtros y búsqueda
 │   │   └── utils.js        # Utilidades
 │   ├── css/
 │   │   ├── style.css       # Estilos principales
-│   │   ├── components.css  # Componentes
-│   │   └── themes.css      # Temas (claro/oscuro)
 │   ├── assets/
 │   │   └── images/
 │   └── index.html
-├── tests/
-├── docs/
 └── package.json
 ```
 
@@ -82,17 +71,6 @@ mundial-pronosticos-2025/
 - Diferencia con el líder
 - Porcentaje de victorias
 - Número de títulos
-
-### Filtros y Búsqueda
-- Búsqueda por nombre de jugador
-- Filtro por rango de posiciones
-- Filtro por porcentaje de victorias
-- Ordenamiento por cualquier columna
-
-### Gráficos Interactivos
-- Gráfico de barras de victorias
-- Gráfico circular de distribución
-- Evolución temporal de posiciones
 
 ## 🔧 Scripts Disponibles
 
@@ -118,7 +96,7 @@ const playerData = {
   games: 178,
   wins: 111,
   losses: 67,
-  titles: 3,
+  titles: 4,
   position: 1
 };
 ```

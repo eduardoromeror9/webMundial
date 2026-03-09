@@ -1,6 +1,6 @@
 // Datos del torneo - Ahora como constante con nombres más descriptivos
 const TOURNAMENT_DATA = [
-  { pos: 0, players: "Eduardo", j: 378, g: 220, p: 158, dif: 0, pct: 0, titulos: 3 },
+  { pos: 0, players: "Eduardo", j: 378, g: 220, p: 158, dif: 0, pct: 0, titulos: 4 },
   { pos: 0, players: "Christian", j: 378, g: 215, p: 163, dif: 0, pct: 0, titulos: 0 },
   { pos: 0, players: "Erycherd", j: 378, g: 208, p: 170, dif: 0, pct: 0, titulos: 0 },
   { pos: 0, players: "Kleydi", j: 378, g: 206, p: 172, dif: 0, pct: 0, titulos: 0 },
