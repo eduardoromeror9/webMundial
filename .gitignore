@@ -1,1 +1,9 @@
-/pruebamejora
+.env
+.env.*
+!.env.example
+
+# Archivos temporales
+*.log
+.DS_Store
+
+node_modules/

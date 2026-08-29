@@ -5,7 +5,8 @@ const TOURNAMENT_DATA = [
   { pos: 0, players: "Erycherd", j: 378, g: 208, p: 170, dif: 0, pct: 0, titulos: 0 },
   { pos: 0, players: "Kleydi", j: 378, g: 206, p: 172, dif: 0, pct: 0, titulos: 0 },
   { pos: 0, players: "Steven", j: 378, g: 206, p: 172, dif: 0, pct: 0, titulos: 2 },
-  { pos: 0, players: "Daniel", j: 378, g: 203, p: 175, dif: 0, pct: 0, titulos: 0 }
+  { pos: 0, players: "Daniel", j: 378, g: 203, p: 175, dif: 0, pct: 0, titulos: 0 },
+  { pos: 0, players: "CarlosJ", j: 378, g: 203, p: 175, dif: 0, pct: 0, titulos: 0 },
 ];
 
 // Inicialización principal usando módulos separados
