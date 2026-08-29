@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel de administración de la plataforma de pronósticos de MLB">
+  <title>Panel Admin — MLB Picks 2026</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+</head>
+
+<body>
+  <div class="floating-balls" aria-hidden="true"></div>
+
+  <div class="container">
+    <nav class="navbar" aria-label="Navegación principal">
+      <a href="index.html" class="nav-brand"><span>⚾</span> MLB PICKS</a>
+      <div class="nav-links">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="index.html" class="nav-link">Tabla</a>
+        <button type="button" id="logoutBtn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.88rem;">Cerrar Sesión</button>
+      </div>
+    </nav>
+
+    <header class="header">
+      <h1 class="main-title">Panel de Administración</h1>
+      <p class="subtitle">Gestión de usuarios, picks, ranking y resultados</p>
+    </header>
+
+    <div class="admin-tabs" role="tablist" aria-label="Secciones del panel">
+      <button class="admin-tab active" data-tab="pending" role="tab">Solicitudes</button>
+      <button class="admin-tab" data-tab="users" role="tab">Usuarios</button>
+      <button class="admin-tab" data-tab="picks" role="tab">Picks del día</button>
+      <button class="admin-tab" data-tab="ranking" role="tab">Ranking</button>
+      <button class="admin-tab" data-tab="games" role="tab">Juegos</button>
+    </div>
+
+    <main id="adminContent" class="admin-content">
+      <!-- Renderizado dinámico por pestaña -->
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { requireAdmin } from './js/route-guards.js';
+    import { signOut } from './js/auth.js';
+    import { createFloatingBalls, handleResize } from './js/floatingBalls.js';
+    import { showToast, setButtonLoading } from './js/ui.js';
+    import {
+      listProfiles, approveUser, rejectUser, updateNickname,
+      getLeaderboard, getPicksByDate, getGamesByDate,
+      setGameResult, setGameStatus, upsertGame
+    } from './js/admin-service.js';
+
+    createFloatingBalls();
+    window.addEventListener('resize', handleResize);
+
+    const contentEl = document.getElementById('adminContent');
+    const tabs = document.querySelectorAll('.admin-tab');
+    let currentTab = 'pending';
+
+    function esc(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function fmtDate(value) {
+      if (!value) return '—';
+      const d = new Date(value);
+      return d.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    function fmtTime(value) {
+      if (!value) return '—';
+      const d = new Date(value);
+      return d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function renderEmpty(message) {
+      return `<div class="admin-empty">${esc(message)}</div>`;
+    }
+
+    function renderError(message) {
+      return `<div class="admin-error">${esc(message)}</div>`;
+    }
+
+    // ---------- Pestaña: Solicitudes pendientes ----------
+    async function renderPending() {
+      contentEl.innerHTML = '<div class="admin-empty">Cargando solicitudes...</div>';
+      const res = await listProfiles('pending');
+
+      if (!res.success) {
+        contentEl.innerHTML = renderError(res.error);
+        return;
+      }
+      if (res.data.length === 0) {
+        contentEl.innerHTML = renderEmpty('No hay solicitudes pendientes.');
+        return;
+      }
+
+      const rows = res.data.map((u) => `
+        <tr>
+          <td class="player-name">${esc(u.nickname)}</td>
+          <td>${esc(u.email)}</td>
+          <td>${fmtDate(u.created_at)}</td>
+          <td>
+            <div class="admin-row-actions">
+              <button class="btn btn-primary btn-sm" data-action="approve" data-id="${u.id}">Aprobar</button>
+              <button class="btn btn-danger btn-sm" data-action="reject" data-id="${u.id}">Rechazar</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      contentEl.innerHTML = `
+        <div class="table-container">
+          <div class="table-wrapper">
+            <table class="stats-table">
+              <thead><tr><th>Apodo</th><th>Correo</th><th>Solicitado</th><th>Acciones</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------- Pestaña: Usuarios aprobados ----------
+    async function renderUsers() {
+      contentEl.innerHTML = '<div class="admin-empty">Cargando usuarios...</div>';
+      const res = await listProfiles('approved');
+
+      if (!res.success) {
+        contentEl.innerHTML = renderError(res.error);
+        return;
+      }
+      if (res.data.length === 0) {
+        contentEl.innerHTML = renderEmpty('No hay usuarios aprobados.');
+        return;
+      }
+
+      const rows = res.data.map((u) => `
+        <tr>
+          <td class="player-name">${esc(u.nickname)}</td>
+          <td>${esc(u.email)}</td>
+          <td>${fmtDate(u.created_at)}</td>
+          <td>
+            <div class="admin-row-actions">
+              <button class="btn btn-secondary btn-sm" data-action="nickname" data-id="${u.id}" data-nick="${esc(u.nickname)}">Editar Apodo</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      contentEl.innerHTML = `
+        <div class="table-container">
+          <div class="table-wrapper">
+            <table class="stats-table">
+              <thead><tr><th>Apodo</th><th>Correo</th><th>Fecha</th><th>Acciones</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------- Pestaña: Picks del día ----------
+    async function renderPicks() {
+      contentEl.innerHTML = '<div class="admin-empty">Cargando picks...</div>';
+      const res = await getPicksByDate();
+
+      if (!res.success) {
+        contentEl.innerHTML = renderError(res.error);
+        return;
+      }
+      if (res.data.length === 0) {
+        contentEl.innerHTML = renderEmpty('No hay picks registrados para esta fecha.');
+        return;
+      }
+
+      const rows = res.data.map((p) => `
+        <tr>
+          <td class="player-name">${esc(p.nickname)}</td>
+          <td>${esc(p.away_team)} @ ${esc(p.home_team)}</td>
+          <td class="percentage">${esc(p.selected_team)}</td>
+          <td>${fmtTime(p.updated_at)}</td>
+          <td>${esc(p.status)}</td>
+        </tr>
+      `).join('');
+
+      contentEl.innerHTML = `
+        <div class="table-container">
+          <div class="table-wrapper">
+            <table class="stats-table">
+              <thead><tr><th>Apodo</th><th>Juego</th><th>Equipo elegido</th><th>Actualizado</th><th>Estado</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------- Pestaña: Ranking ----------
+    async function renderRanking() {
+      contentEl.innerHTML = '<div class="admin-empty">Cargando ranking...</div>';
+      const res = await getLeaderboard();
+
+      if (!res.success) {
+        contentEl.innerHTML = renderError(res.error);
+        return;
+      }
+      if (res.data.length === 0) {
+        contentEl.innerHTML = renderEmpty('El ranking aún no tiene datos.');
+        return;
+      }
+
+      const rows = res.data.map((r) => `
+        <tr>
+          <td class="position">${r.position}</td>
+          <td class="player-name">${esc(r.nickname)}</td>
+          <td class="wins">${r.wins_total}</td>
+          <td class="losses">${r.losses_total}</td>
+          <td class="percentage">${r.percentage.toFixed(2)}%</td>
+          <td>${r.perfect_days}</td>
+        </tr>
+      `).join('');
+
+      contentEl.innerHTML = `
+        <div class="table-container">
+          <div class="table-wrapper">
+            <table class="stats-table">
+              <thead><tr><th>Pos</th><th>Apodo</th><th>G</th><th>P</th><th>PCT</th><th>Días perfectos</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------- Pestaña: Juegos ----------
+    async function renderGames() {
+      contentEl.innerHTML = '<div class="admin-empty">Cargando juegos...</div>';
+      const res = await getGamesByDate();
+
+      if (!res.success) {
+        contentEl.innerHTML = renderError(res.error);
+        return;
+      }
+
+      const rows = (res.data || []).map((g) => `
+        <tr>
+          <td>${esc(g.away_team)} @ ${esc(g.home_team)}</td>
+          <td>${fmtTime(g.start_time)}</td>
+          <td>${esc(g.status)}</td>
+          <td>${g.home_score != null ? `${g.home_score} - ${g.away_score}` : '—'}</td>
+          <td>
+            <div class="admin-row-actions">
+              <button class="btn btn-primary btn-sm" data-action="result" data-id="${g.id}" data-score="${g.home_score ?? ''},${g.away_score ?? ''}" ${g.status === 'final' ? '' : ''}>Resultado</button>
+              <button class="btn btn-secondary btn-sm" data-action="status" data-id="${g.id}" data-status="${esc(g.status)}">Estado</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      contentEl.innerHTML = `
+        <div class="admin-actions-bar">
+          <button class="btn btn-primary" id="addGameBtn">+ Crear Juego</button>
+        </div>
+        <div class="table-container">
+          <div class="table-wrapper">
+            <table class="stats-table">
+              <thead><tr><th>Juego</th><th>Hora</th><th>Estado</th><th>Marcador</th><th>Acciones</th></tr></thead>
+              <tbody>${rows || '<tr><td colspan="5">No hay juegos para esta fecha.</td></tr>'}</tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // ---------- Diálogos reutilizables ----------
+    function openEditModal({ title, fields, onOk, okText = 'Guardar' }) {
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop';
+      backdrop.setAttribute('role', 'dialog');
+      backdrop.setAttribute('aria-modal', 'true');
+
+      const inputs = fields.map((f) => `
+        <div class="form-group">
+          <label class="form-label">${esc(f.label)}</label>
+          <input class="form-control" id="modal-input-${esc(f.id)}" type="${f.type || 'text'}" value="${esc(f.value ?? '')}" min="${f.min ?? ''}" placeholder="${esc(f.placeholder || '')}">
+        </div>
+      `).join('');
+
+      backdrop.innerHTML = `
+        <div class="modal-card">
+          <h3 class="modal-title">${esc(title)}</h3>
+          <div class="modal-body">${inputs}</div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+            <button type="button" class="btn btn-primary modal-ok">${esc(okText)}</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(backdrop);
+      const close = () => backdrop.remove();
+      backdrop.querySelector('.modal-cancel').addEventListener('click', close);
+      backdrop.querySelector('.modal-ok').addEventListener('click', async () => {
+        const values = {};
+        fields.forEach((f) => {
+          values[f.id] = document.getElementById(`modal-input-${f.id}`).value;
+        });
+        await onOk(values);
+        close();
+      });
+
+      fields.forEach((f) => {
+        const el = document.getElementById(`modal-input-${f.id}`);
+        if (el) el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') backdrop.querySelector('.modal-ok').click();
+        });
+      });
+    }
+
+    function promptResult(gameId) {
+      openEditModal({
+        title: 'Cargar / Corregir Resultado',
+        fields: [
+          { id: 'home', label: 'Marcador Local', type: 'number', min: '0', value: '' },
+          { id: 'away', label: 'Marcador Visitante', type: 'number', min: '0', value: '' },
+        ],
+        onOk: async (v) => {
+          const h = parseInt(v.home, 10);
+          const a = parseInt(v.away, 10);
+          if (Number.isNaN(h) || Number.isNaN(a) || h < 0 || a < 0) {
+            showToast('Ingresa marcadores válidos.', 'error');
+            return;
+          }
+          setButtonLoading(document.querySelector('.modal-ok'), true, 'Guardando...');
+          const res = await setGameResult(gameId, h, a);
+          if (res.success) {
+            showToast('Resultado guardado y recalculado.', 'success');
+            renderGames();
+          } else {
+            showToast(res.error, 'error');
+          }
+        },
+      });
+    }
+
+    function promptStatus(gameId, current) {
+      const valid = ['scheduled', 'live', 'final', 'postponed', 'cancelled'];
+      const options = valid.map((s) => `<option value="${s}" ${s === current ? 'selected' : ''}>${s}</option>`).join('');
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop';
+      backdrop.setAttribute('role', 'dialog');
+      backdrop.setAttribute('aria-modal', 'true');
+      backdrop.innerHTML = `
+        <div class="modal-card">
+          <h3 class="modal-title">Cambiar Estado</h3>
+          <div class="modal-body">
+            <select class="form-control" id="status-select">${options}</select>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary modal-cancel">Cancelar</button>
+            <button type="button" class="btn btn-primary modal-ok">Guardar</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(backdrop);
+      const close = () => backdrop.remove();
+      backdrop.querySelector('.modal-cancel').addEventListener('click', close);
+      backdrop.querySelector('.modal-ok').addEventListener('click', async () => {
+        const status = document.getElementById('status-select').value;
+        const res = await setGameStatus(gameId, status);
+        if (res.success) {
+          showToast('Estado actualizado.', 'success');
+          renderGames();
+        } else {
+          showToast(res.error, 'error');
+        }
+        close();
+      });
+    }
+
+    function promptNewGame() {
+      openEditModal({
+        title: 'Crear Juego Manual',
+        fields: [
+          { id: 'away', label: 'Equipo Visitante', value: '' },
+          { id: 'home', label: 'Equipo Local', value: '' },
+          { id: 'game_date', label: 'Fecha (YYYY-MM-DD)', value: new Date().toISOString().slice(0, 10) },
+          { id: 'start_time', label: 'Hora (HH:MM, local Chile)', value: '' },
+        ],
+        onOk: async (v) => {
+          const today = new Date().toISOString().slice(0, 10);
+          if (!v.away.trim() || !v.home.trim() || !v.game_date) {
+            showToast('Completa visitante, local y fecha.', 'error');
+            return;
+          }
+          let start = null;
+          if (v.start_time) {
+            start = `${v.game_date}T${v.start_time}:00-04:00`;
+          }
+          setButtonLoading(document.querySelector('.modal-ok'), true, 'Guardando...');
+          const res = await upsertGame({
+            game_date: v.game_date,
+            start_time: start,
+            home_team: v.home.trim(),
+            away_team: v.away.trim(),
+          });
+          if (res.success) {
+            showToast('Juego creado.', 'success');
+            renderGames();
+          } else {
+            showToast(res.error, 'error');
+          }
+        },
+      });
+    }
+
+    // ---------- Routing de acciones en tablas ----------
+    async function handleTableClick(event) {
+      const btn = event.target.closest('button[data-action]');
+      if (!btn) return;
+
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+
+      if (action === 'approve') {
+        const res = await approveUser(id);
+        showToast(res.success ? 'Solicitud aprobada.' : res.error, res.success ? 'success' : 'error');
+        if (res.success) renderPending();
+      } else if (action === 'reject') {
+        if (!window.confirm('¿Seguro que deseas rechazar esta solicitud?')) return;
+        const res = await rejectUser(id);
+        showToast(res.success ? 'Solicitud rechazada.' : res.error, res.success ? 'success' : 'error');
+        if (res.success) renderPending();
+      } else if (action === 'nickname') {
+        openEditModal({
+          title: 'Editar Apodo',
+          fields: [{ id: 'nick', label: 'Apodo público', value: btn.dataset.nick || '' }],
+          onOk: async (v) => {
+            if (!v.nick.trim()) { showToast('El apodo no puede estar vacío.', 'error'); return; }
+            setButtonLoading(document.querySelector('.modal-ok'), true, 'Guardando...');
+            const res = await updateNickname(id, v.nick.trim());
+            if (res.success) {
+              showToast('Apodo actualizado.', 'success');
+              renderUsers();
+            } else {
+              showToast(res.error, 'error');
+            }
+          },
+        });
+      } else if (action === 'result') {
+        promptResult(id);
+      } else if (action === 'status') {
+        promptStatus(id, btn.dataset.status);
+      }
+    }
+
+    contentEl.addEventListener('click', handleTableClick);
+
+    // ---------- Rutas por pestaña ----------
+    const renderers = {
+      pending: renderPending,
+      users: renderUsers,
+      picks: renderPicks,
+      ranking: renderRanking,
+      games: renderGames,
+    };
+
+    function showTab(tab) {
+      currentTab = tab;
+      tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === tab));
+      renderers[tab]();
+    }
+
+    tabs.forEach((t) => {
+      t.addEventListener('click', () => showTab(t.dataset.tab));
+    });
+
+    // Botón crear juego (delegado)
+    contentEl.addEventListener('click', (e) => {
+      if (e.target.id === 'addGameBtn') promptNewGame();
+    });
+
+    // ---------- Guard y logout ----------
+    const pending = await requireAdmin();
+    if (pending) {
+      showTab(currentTab);
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await signOut();
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+
+</html>

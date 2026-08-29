@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Registro de usuario para participar en el torneo de pronósticos de MLB">
+  
+  <title>Registro — MLB Picks 2026</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+</head>
+
+<body>
+  <!-- Fondo con animación de partículas -->
+  <div class="floating-balls" aria-hidden="true"></div>
+
+  <div class="container">
+    <!-- Barra de navegación -->
+    <nav class="navbar" aria-label="Navegación principal">
+      <a href="index.html" class="nav-brand">
+        <span>⚾</span> MLB PICKS
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Inicio</a>
+        <a href="index.html" class="nav-link">Tabla</a>
+        <a href="login.html" class="nav-link">Iniciar Sesión</a>
+      </div>
+    </nav>
+
+    <!-- Contenedor del formulario de registro -->
+    <main class="auth-container">
+      <div class="auth-card" id="authCard">
+        
+        <!-- Vista Formulario -->
+        <div id="registerFormView">
+          <div class="auth-header">
+            <h1 class="auth-title">Crear Cuenta</h1>
+            <p class="auth-subtitle">Solicita tu participación en el torneo MLB 2026</p>
+          </div>
+
+          <div id="formAlert" class="form-alert"></div>
+
+          <form id="registerForm" novalidate>
+            <div class="form-group">
+              <label for="nickname" class="form-label">Apodo o Nickname Público *</label>
+              <input type="text" id="nickname" name="nickname" class="form-control" placeholder="Ej: ElKingDeLosPronosticos" required autocomplete="nickname" maxlength="30">
+              <p class="form-help">Este nombre aparecerá en la tabla pública de posiciones.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Correo Electrónico *</label>
+              <input type="email" id="email" name="email" class="form-control" placeholder="tu@correo.com" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label for="phone" class="form-label">Teléfono / WhatsApp (Opcional)</label>
+              <input type="tel" id="phone" name="phone" class="form-control" placeholder="+56 9 1234 5678" autocomplete="tel">
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="form-label">Contraseña *</label>
+              <input type="password" id="password" name="password" class="form-control" placeholder="Mínimo 6 caracteres" required autocomplete="new-password" minlength="6">
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword" class="form-label">Confirmar Contraseña *</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Repite tu contraseña" required autocomplete="new-password" minlength="6">
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
+              Solicitar Registro
+            </button>
+          </form>
+
+          <div class="auth-footer">
+            <p>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+          </div>
+        </div>
+
+        <!-- Vista Estado Pendiente (Post-Registro) -->
+        <div id="pendingSuccessView" class="status-card" style="display: none;">
+          <div class="status-icon" aria-hidden="true">⏳</div>
+          <h2 class="status-title">¡Solicitud Enviada!</h2>
+          <p class="status-text">
+            Tu cuenta ha sido creada exitosamente y se encuentra <strong>pendiente de aprobación</strong> por el administrador.<br><br>
+            Una vez aprobada tu solicitud, podrás ingresar con tu correo y contraseña para seleccionar tus pronósticos de MLB.
+          </p>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <a href="login.html" class="btn btn-primary">Ir al Inicio de Sesión</a>
+            <a href="index.html" class="btn btn-secondary">Ver Tabla Pública</a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { signUp } from './js/auth.js';
+    import { redirectIfAuthenticated } from './js/route-guards.js';
+    import { showFormAlert, clearFormAlert, setButtonLoading, showToast } from './js/ui.js';
+    import { createFloatingBalls, handleResize } from './js/floatingBalls.js';
+
+    // Inicializar fondo y verificar si ya hay sesión
+    createFloatingBalls();
+    window.addEventListener('resize', handleResize);
+    redirectIfAuthenticated();
+
+    const form = document.getElementById('registerForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formAlert = document.getElementById('formAlert');
+    const formView = document.getElementById('registerFormView');
+    const successView = document.getElementById('pendingSuccessView');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearFormAlert(formAlert);
+
+      const nickname = document.getElementById('nickname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Validaciones básicas
+      if (!nickname || !email || !password) {
+        showFormAlert(formAlert, 'Por favor completa todos los campos requeridos (*).');
+        return;
+      }
+
+      if (password.length < 6) {
+        showFormAlert(formAlert, 'La contraseña debe tener al menos 6 caracteres.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showFormAlert(formAlert, 'Las contraseñas no coinciden.');
+        return;
+      }
+
+      setButtonLoading(submitBtn, true, 'Enviando solicitud...');
+
+      const result = await signUp({ email, password, nickname, phone });
+
+      setButtonLoading(submitBtn, false);
+
+      if (result.success) {
+        showToast('¡Registro exitoso! Tu cuenta está en revisión.', 'success');
+        formView.style.display = 'none';
+        successView.style.display = 'block';
+      } else {
+        showFormAlert(formAlert, result.error || 'Ocurrió un error al registrar.');
+      }
+    });
+  </script>
+</body>
+
+</html>

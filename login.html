@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inicio de sesión en la plataforma de pronósticos de MLB">
+  
+  <title>Iniciar Sesión — MLB Picks 2026</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+</head>
+
+<body>
+  <!-- Fondo con animación de partículas -->
+  <div class="floating-balls" aria-hidden="true"></div>
+
+  <div class="container">
+    <!-- Barra de navegación -->
+    <nav class="navbar" aria-label="Navegación principal">
+      <a href="index.html" class="nav-brand">
+        <span>⚾</span> MLB PICKS
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Inicio</a>
+        <a href="index.html" class="nav-link">Tabla</a>
+        <a href="registro.html" class="nav-link">Registrarse</a>
+      </div>
+    </nav>
+
+    <!-- Contenedor de Auth -->
+    <main class="auth-container">
+      <div class="auth-card" id="authCard">
+        
+        <!-- Vista 1: Formulario de Login -->
+        <div id="loginFormView">
+          <div class="auth-header">
+            <h1 class="auth-title">Iniciar Sesión</h1>
+            <p class="auth-subtitle">Ingresa a tu cuenta de pronósticos MLB</p>
+          </div>
+
+          <div id="formAlert" class="form-alert"></div>
+
+          <form id="loginForm" novalidate>
+            <div class="form-group">
+              <label for="email" class="form-label">Correo Electrónico</label>
+              <input type="email" id="email" name="email" class="form-control" placeholder="tu@correo.com" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" id="password" name="password" class="form-control" placeholder="Tu contraseña" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary btn-block">
+              Iniciar Sesión
+            </button>
+          </form>
+
+          <div class="auth-footer">
+            <p>¿Aún no tienes cuenta? <a href="registro.html">Solicita tu registro aquí</a></p>
+          </div>
+        </div>
+
+        <!-- Vista 2: Estado Pendiente -->
+        <div id="pendingStatusView" class="status-card" style="display: none;">
+          <div class="status-icon" aria-hidden="true">⏳</div>
+          <h2 class="status-title">Solicitud en Revisión</h2>
+          <p class="status-text">
+            Hola <strong id="pendingNickname">jugador</strong>. Tu cuenta está registrada correctamente, pero aún se encuentra <strong>pendiente de aprobación</strong> por el administrador.<br><br>
+            Podrás acceder a realizar tus pronósticos una vez aprobada tu solicitud.
+          </p>
+          <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" id="pendingLogoutBtn" class="btn btn-secondary">Cerrar Sesión</button>
+            <a href="index.html" class="btn btn-primary">Ver Tabla Pública</a>
+          </div>
+        </div>
+
+        <!-- Vista 3: Estado Rechazado -->
+        <div id="rejectedStatusView" class="status-card" style="display: none;">
+          <div class="status-icon" aria-hidden="true">⛔</div>
+          <h2 class="status-title" style="color: var(--primary-red);">Solicitud No Aprobada</h2>
+          <p class="status-text">
+            Lo sentimos, tu solicitud de participación para esta temporada no ha sido aprobada por el administrador.<br><br>
+            Si crees que se trata de un error, por favor contacta directamente al comisionado del torneo.
+          </p>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button type="button" id="rejectedLogoutBtn" class="btn btn-secondary">Cerrar Sesión</button>
+            <a href="index.html" class="btn btn-primary">Ver Tabla Pública</a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script type="module">
+    import { signIn, signOut, getCurrentProfile, getCurrentUser } from './js/auth.js';
+    import { showFormAlert, clearFormAlert, setButtonLoading, showToast } from './js/ui.js';
+    import { createFloatingBalls, handleResize } from './js/floatingBalls.js';
+
+    createFloatingBalls();
+    window.addEventListener('resize', handleResize);
+
+    const form = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formAlert = document.getElementById('formAlert');
+    const loginView = document.getElementById('loginFormView');
+    const pendingView = document.getElementById('pendingStatusView');
+    const rejectedView = document.getElementById('rejectedStatusView');
+    const pendingNickname = document.getElementById('pendingNickname');
+    const pendingLogoutBtn = document.getElementById('pendingLogoutBtn');
+    const rejectedLogoutBtn = document.getElementById('rejectedLogoutBtn');
+
+    // Manejar cierre de sesión desde vistas de estado
+    const handleLogout = async () => {
+      await signOut();
+      pendingView.style.display = 'none';
+      rejectedView.style.display = 'none';
+      loginView.style.display = 'block';
+      showToast('Sesión cerrada correctamente.', 'info');
+    };
+
+    pendingLogoutBtn.addEventListener('click', handleLogout);
+    rejectedLogoutBtn.addEventListener('click', handleLogout);
+
+    // Evaluar si ya hay un usuario logueado al cargar
+    async function checkCurrentSession() {
+      const user = await getCurrentUser();
+      if (!user) return;
+
+      const profile = await getCurrentProfile(user.id);
+      if (!profile) return;
+
+      handleUserStatus(profile);
+    }
+
+    function handleUserStatus(profile) {
+      if (profile.role === 'admin') {
+        window.location.href = 'admin.html';
+        return;
+      }
+
+      if (profile.status === 'approved') {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      loginView.style.display = 'none';
+
+      if (profile.status === 'pending') {
+        pendingNickname.textContent = profile.nickname || 'jugador';
+        pendingView.style.display = 'block';
+      } else if (profile.status === 'rejected') {
+        rejectedView.style.display = 'block';
+      }
+    }
+
+    // Verificar sesión inicial
+    checkCurrentSession();
+
+    // Manejar envío de formulario
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearFormAlert(formAlert);
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        showFormAlert(formAlert, 'Por favor ingresa tu correo y contraseña.');
+        return;
+      }
+
+      setButtonLoading(submitBtn, true, 'Verificando...');
+
+      const result = await signIn({ email, password });
+
+      setButtonLoading(submitBtn, false);
+
+      if (result.success) {
+        showToast('Inicio de sesión exitoso', 'success');
+        if (result.profile) {
+          handleUserStatus(result.profile);
+        } else {
+          // Si el perfil aún no se carga, reintentar
+          const p = await getCurrentProfile(result.user.id);
+          if (p) handleUserStatus(p);
+          else window.location.href = 'index.html';
+        }
+      } else {
+        showFormAlert(formAlert, result.error || 'Credenciales incorrectas.');
+      }
+    });
+  </script>
+</body>
+
+</html>

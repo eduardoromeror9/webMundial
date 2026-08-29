@@ -8,11 +8,11 @@
   <meta name="keywords" content="pronósticos, mundial, estadísticas, deportes">
   <meta name="author" content="Eduardo Romero">
 
-  <!-- Mejorado: CSP básico para seguridad -->
+  <!-- CSP para Supabase, Google Fonts y MLB API -->
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; style-src 'self' 'unsafe-inline' fonts.googleapis.com fonts.gstatic.com; font-src fonts.googleapis.com fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
+    content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://esm.sh https://cdn.jsdelivr.net; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://statsapi.mlb.com https://esm.sh https://cdn.jsdelivr.net; img-src 'self' data: https:;">
 
-  <!-- Mejorado: Preload de fuentes críticas -->
+  <!-- Preload de fuentes críticas -->
   <link rel="preload"
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap"
     as="style">
@@ -21,22 +21,21 @@
 
   <title>Mundial de Pronósticos Temporada 2026</title>
 
-  <!-- Corregido: Rutas relativas en lugar de absolutas -->
+  <!-- Rutas relativas -->
   <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="css/style.css">
 
-  <!-- Mejorado: Favicon con fallback -->
+  <!-- Favicon con fallback -->
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
   <link rel="alternate icon" href="img/favicon.ico">
 
-  <!-- Mejorado: PWA meta tags -->
+  <!-- PWA meta tags -->
   <meta name="theme-color" content="#0f0f0f">
-  <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Mundial 2026">
   <meta name="mobile-web-app-capable" content="yes">
 
-  <!-- Mejorado: Open Graph para redes sociales -->
+  <!-- Open Graph para redes sociales -->
   <meta property="og:title" content="Mundial de Pronósticos 2026">
   <meta property="og:description" content="Tabla de posiciones y estadísticas del Mundial de Pronósticos">
   <meta property="og:type" content="website">
@@ -44,19 +43,21 @@
 </head>
 
 <body>
-  <!-- Mejorado: Contenedor de pelotas flotantes con aria-hidden -->
-  <div class="floating-balls" aria-hidden="true">
-    <div class="ball" style="left: 10%; animation-delay: 0s;">⚾</div>
-    <div class="ball" style="left: 20%; animation-delay: 1s;">🔥</div>
-    <div class="ball" style="left: 70%; animation-delay: 2s;">⚾</div>
-    <div class="ball" style="left: 80%; animation-delay: 3s;">🔥</div>
-    <div class="ball" style="left: 90%; animation-delay: 4s;">⚾</div>
-  </div>
-
-  <!-- Mejorado: Skip link para accesibilidad -->
-  <!-- <a href="#main-content" class="skip-link">Saltar al contenido principal</a> -->
+  <!-- Contenedor de pelotas flotantes con aria-hidden -->
+  <div class="floating-balls" aria-hidden="true"></div>
 
   <div class="container">
+    <!-- Barra de navegación -->
+    <nav class="navbar" aria-label="Navegación principal">
+      <a href="index.html" class="nav-brand">
+        <span>⚾</span> MLB PICKS
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">Tabla</a>
+        <a href="login.html" class="nav-link">Iniciar Sesión</a>
+        <a href="registro.html" class="btn btn-primary" style="padding: 6px 14px; font-size: 0.88rem;">Registrarse</a>
+      </div>
+    </nav>
     <header class="header">
       <div class="emoji-decoration" aria-hidden="true">⚾</div>
       <h1 class="main-title">Mundial de Pronósticos Temp 2026</h1>
@@ -133,19 +134,11 @@
     </div>
   </footer>
 
-  <!-- Mejorado: Script cargado de forma asíncrona -->
-  <script type="module" src="app.js"></script>
+  <!-- Configuración (URL y anon key de Supabase) -->
+  <script src="js/config.js"></script>
 
-  <!-- Mejorado: Service Worker para PWA (opcional) -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(registration => console.log('SW registered'))
-          .catch(error => console.log('SW registration failed'));
-      });
-    }
-  </script>
+  <!-- Script principal -->
+  <script type="module" src="app.js"></script>
 
   <!-- Mejorado: Analytics de rendimiento -->
   <script>

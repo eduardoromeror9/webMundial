@@ -8,5 +8,8 @@
 
 node_modules/
 
-# Documentación excluir la carpeta docs y todo su contenido
+# Documentación
 docs/
+
+# Plan de mejoras (interno, no se sube al repo)
+PLAN-MEJORAS.md
